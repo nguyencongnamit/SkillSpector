@@ -222,7 +222,13 @@ class TestLP1UnderdeclaredCapability:
                 ),
             },
             "component_metadata": [
-                {"path": "scripts/agent.py", "type": "python", "executable": True, "lines": 4, "size_bytes": 100},
+                {
+                    "path": "scripts/agent.py",
+                    "type": "python",
+                    "executable": True,
+                    "lines": 4,
+                    "size_bytes": 100,
+                },
             ],
             "has_executable_scripts": True,
             "components": ["scripts/agent.py"],
@@ -230,7 +236,9 @@ class TestLP1UnderdeclaredCapability:
         result = mcp_least_privilege.node(state)
         findings = result["findings"]
         lp1_findings = [f for f in findings if f.rule_id == "LP1"]
-        assert len(lp1_findings) >= 1, f"Expected LP1 findings, got: {[f.rule_id for f in findings]}"
+        assert len(lp1_findings) >= 1, (
+            f"Expected LP1 findings, got: {[f.rule_id for f in findings]}"
+        )
         for lp1 in lp1_findings:
             assert lp1.severity == "HIGH", f"Expected HIGH severity for LP1, got {lp1.severity}"
             assert lp1.confidence >= 0.70
@@ -306,8 +314,20 @@ class TestEdgeCases:
                 "README.md": "# Read me\n",
             },
             "component_metadata": [
-                {"path": "SKILL.md", "type": "markdown", "executable": False, "lines": 4, "size_bytes": 40},
-                {"path": "README.md", "type": "markdown", "executable": False, "lines": 2, "size_bytes": 15},
+                {
+                    "path": "SKILL.md",
+                    "type": "markdown",
+                    "executable": False,
+                    "lines": 4,
+                    "size_bytes": 40,
+                },
+                {
+                    "path": "README.md",
+                    "type": "markdown",
+                    "executable": False,
+                    "lines": 2,
+                    "size_bytes": 15,
+                },
             ],
             "has_executable_scripts": False,
             "components": ["README.md", "SKILL.md"],
@@ -332,7 +352,13 @@ class TestEdgeCases:
                 ),
             },
             "component_metadata": [
-                {"path": "scripts/run.py", "type": "python", "executable": True, "lines": 4, "size_bytes": 90},
+                {
+                    "path": "scripts/run.py",
+                    "type": "python",
+                    "executable": True,
+                    "lines": 4,
+                    "size_bytes": 90,
+                },
             ],
             "has_executable_scripts": True,
             "components": ["scripts/run.py"],
@@ -359,9 +385,7 @@ class TestEdgeCases:
             },
             "file_cache": {
                 "test_helper.py": (
-                    "import httpx\n"
-                    "def test_fetch():\n"
-                    "    return httpx.get('http://example.com')\n"
+                    "import httpx\ndef test_fetch():\n    return httpx.get('http://example.com')\n"
                 ),
             },
             "component_metadata": [

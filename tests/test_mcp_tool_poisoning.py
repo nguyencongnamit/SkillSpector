@@ -243,7 +243,9 @@ class TestTP1HiddenInstructions:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp1 = [f for f in findings if f.rule_id == "TP1"]
-        assert len(tp1) >= 1, f"Expected TP1 finding for zero-width char, got: {[f.rule_id for f in findings]}"
+        assert len(tp1) >= 1, (
+            f"Expected TP1 finding for zero-width char, got: {[f.rule_id for f in findings]}"
+        )
         assert tp1[0].confidence >= 0.85
 
     def test_base64_in_description(self):
@@ -262,7 +264,9 @@ class TestTP1HiddenInstructions:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp1 = [f for f in findings if f.rule_id == "TP1"]
-        assert len(tp1) >= 1, f"Expected TP1 finding for base64, got: {[f.rule_id for f in findings]}"
+        assert len(tp1) >= 1, (
+            f"Expected TP1 finding for base64, got: {[f.rule_id for f in findings]}"
+        )
         assert tp1[0].confidence >= 0.75
 
     def test_data_uri_in_metadata(self):
@@ -279,7 +283,9 @@ class TestTP1HiddenInstructions:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp1 = [f for f in findings if f.rule_id == "TP1"]
-        assert len(tp1) >= 1, f"Expected TP1 finding for data URI, got: {[f.rule_id for f in findings]}"
+        assert len(tp1) >= 1, (
+            f"Expected TP1 finding for data URI, got: {[f.rule_id for f in findings]}"
+        )
 
     def test_instruction_keyword_in_comment(self):
         """HTML comment with instruction keyword → TP1, confidence >= 0.95."""
@@ -323,7 +329,9 @@ class TestTP2UnicodeDeception:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp2 = [f for f in findings if f.rule_id == "TP2"]
-        assert len(tp2) >= 1, f"Expected TP2 finding for homoglyph, got: {[f.rule_id for f in findings]}"
+        assert len(tp2) >= 1, (
+            f"Expected TP2 finding for homoglyph, got: {[f.rule_id for f in findings]}"
+        )
         assert tp2[0].confidence >= 0.90, f"Expected confidence >= 0.90, got {tp2[0].confidence}"
 
     def test_rtl_override(self):
@@ -339,7 +347,9 @@ class TestTP2UnicodeDeception:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp2 = [f for f in findings if f.rule_id == "TP2"]
-        assert len(tp2) >= 1, f"Expected TP2 finding for RTL override, got: {[f.rule_id for f in findings]}"
+        assert len(tp2) >= 1, (
+            f"Expected TP2 finding for RTL override, got: {[f.rule_id for f in findings]}"
+        )
         assert tp2[0].confidence >= 0.95, f"Expected confidence >= 0.95, got {tp2[0].confidence}"
 
     def test_mixed_script(self):
@@ -356,7 +366,9 @@ class TestTP2UnicodeDeception:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp2 = [f for f in findings if f.rule_id == "TP2"]
-        assert len(tp2) >= 1, f"Expected TP2 finding for mixed script, got: {[f.rule_id for f in findings]}"
+        assert len(tp2) >= 1, (
+            f"Expected TP2 finding for mixed script, got: {[f.rule_id for f in findings]}"
+        )
         assert any("script" in (f.message or "").lower() for f in tp2), (
             f"Expected 'script' in TP2 message, got: {[f.message for f in tp2]}"
         )
@@ -374,7 +386,9 @@ class TestTP2UnicodeDeception:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp2 = [f for f in findings if f.rule_id == "TP2"]
-        assert len(tp2) >= 1, f"Expected TP2 finding for invisible formatting, got: {[f.rule_id for f in findings]}"
+        assert len(tp2) >= 1, (
+            f"Expected TP2 finding for invisible formatting, got: {[f.rule_id for f in findings]}"
+        )
         assert tp2[0].confidence >= 0.80, f"Expected confidence >= 0.80, got {tp2[0].confidence}"
 
 
@@ -422,7 +436,9 @@ class TestTP3ParameterInjection:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp3 = [f for f in findings if f.rule_id == "TP3"]
-        assert len(tp3) >= 1, f"Expected TP3 finding for SYSTEM token, got: {[f.rule_id for f in findings]}"
+        assert len(tp3) >= 1, (
+            f"Expected TP3 finding for SYSTEM token, got: {[f.rule_id for f in findings]}"
+        )
         assert tp3[0].confidence >= 0.90, f"Expected confidence >= 0.90, got {tp3[0].confidence}"
 
     def test_exfiltration_in_param_description(self):
@@ -443,7 +459,9 @@ class TestTP3ParameterInjection:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp3 = [f for f in findings if f.rule_id == "TP3"]
-        assert len(tp3) >= 1, f"Expected TP3 finding for exfiltration, got: {[f.rule_id for f in findings]}"
+        assert len(tp3) >= 1, (
+            f"Expected TP3 finding for exfiltration, got: {[f.rule_id for f in findings]}"
+        )
 
     def test_malicious_default_value(self):
         """Parameter default value containing curl command → TP3 finding."""
@@ -464,7 +482,9 @@ class TestTP3ParameterInjection:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp3 = [f for f in findings if f.rule_id == "TP3"]
-        assert len(tp3) >= 1, f"Expected TP3 finding for malicious default, got: {[f.rule_id for f in findings]}"
+        assert len(tp3) >= 1, (
+            f"Expected TP3 finding for malicious default, got: {[f.rule_id for f in findings]}"
+        )
 
     def test_excessive_description_length(self):
         """Parameter description exceeding 500 chars → TP3 finding, confidence ~0.65."""
@@ -485,7 +505,9 @@ class TestTP3ParameterInjection:
         result = mcp_tool_poisoning.node(state)
         findings = result["findings"]
         tp3 = [f for f in findings if f.rule_id == "TP3"]
-        assert len(tp3) >= 1, f"Expected TP3 finding for excessive length, got: {[f.rule_id for f in findings]}"
+        assert len(tp3) >= 1, (
+            f"Expected TP3 finding for excessive length, got: {[f.rule_id for f in findings]}"
+        )
         # Confidence should be approximately 0.65
         len_finding = [f for f in tp3 if abs(f.confidence - 0.65) < 0.05]
         assert len(len_finding) >= 1, (
@@ -583,6 +605,7 @@ class TestTP4Fallbacks:
 
     def test_llm_call_failure_returns_empty(self):
         from unittest.mock import patch
+
         state = _make_state("mcp_mismatched_skill", use_llm=True)
         with patch(
             "skillspector.nodes.analyzers.mcp_tool_poisoning.chat_completion",
@@ -594,6 +617,7 @@ class TestTP4Fallbacks:
 
     def test_unparseable_response_returns_empty(self):
         from unittest.mock import patch
+
         state = _make_state("mcp_mismatched_skill", use_llm=True)
         with patch(
             "skillspector.nodes.analyzers.mcp_tool_poisoning.chat_completion",
@@ -620,13 +644,16 @@ class TestFullPipelineIntegration:
     def test_full_pipeline_poisoned_skill(self):
         """TP1+TP2 findings survive meta_analyzer filtering."""
         from skillspector.graph import create_graph
+
         fixture_path = str(FIXTURES_DIR / "mcp_poisoned_tool")
         graph = create_graph()
-        result = graph.invoke({
-            "input_path": fixture_path,
-            "output_format": "json",
-            "use_llm": False,
-        })
+        result = graph.invoke(
+            {
+                "input_path": fixture_path,
+                "output_format": "json",
+                "use_llm": False,
+            }
+        )
         # Check filtered_findings (post-meta_analyzer) or findings (pre-meta)
         findings = result.get("filtered_findings") or result.get("findings", [])
         rule_ids = {f.rule_id for f in findings}
@@ -635,13 +662,16 @@ class TestFullPipelineIntegration:
     def test_full_pipeline_clean_skill(self):
         """Clean skill produces no MCP findings through full pipeline."""
         from skillspector.graph import create_graph
+
         fixture_path = str(FIXTURES_DIR / "mcp_clean_skill")
         graph = create_graph()
-        result = graph.invoke({
-            "input_path": fixture_path,
-            "output_format": "json",
-            "use_llm": False,
-        })
+        result = graph.invoke(
+            {
+                "input_path": fixture_path,
+                "output_format": "json",
+                "use_llm": False,
+            }
+        )
         findings = result.get("filtered_findings") or result.get("findings", [])
         mcp_findings = [f for f in findings if f.rule_id.startswith(("TP", "LP"))]
         assert len(mcp_findings) == 0
@@ -649,13 +679,16 @@ class TestFullPipelineIntegration:
     def test_sarif_output_contains_tp_rules(self):
         """SARIF output includes TP rule IDs and ASI02 tags."""
         from skillspector.graph import create_graph
+
         fixture_path = str(FIXTURES_DIR / "mcp_poisoned_tool")
         graph = create_graph()
-        result = graph.invoke({
-            "input_path": fixture_path,
-            "output_format": "sarif",
-            "use_llm": False,
-        })
+        result = graph.invoke(
+            {
+                "input_path": fixture_path,
+                "output_format": "sarif",
+                "use_llm": False,
+            }
+        )
         sarif = result.get("sarif_report", {})
         runs = sarif.get("runs", [])
         assert len(runs) > 0
@@ -667,13 +700,16 @@ class TestFullPipelineIntegration:
     def test_no_llm_mode_excludes_tp4(self):
         """With use_llm=False, TP4 should not appear."""
         from skillspector.graph import create_graph
+
         fixture_path = str(FIXTURES_DIR / "mcp_poisoned_tool")
         graph = create_graph()
-        result = graph.invoke({
-            "input_path": fixture_path,
-            "output_format": "json",
-            "use_llm": False,
-        })
+        result = graph.invoke(
+            {
+                "input_path": fixture_path,
+                "output_format": "json",
+                "use_llm": False,
+            }
+        )
         findings = result.get("filtered_findings") or result.get("findings", [])
         rule_ids = {f.rule_id for f in findings}
         assert "TP4" not in rule_ids

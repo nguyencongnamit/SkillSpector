@@ -217,9 +217,7 @@ def node(state: SkillspectorState) -> AnalyzerNodeResponse:
 
     # --- LP3: No permissions declared ---
     # Detect code capabilities first so we can check whether any were found
-    executable_paths = [
-        m["path"] for m in component_metadata if m.get("executable", False)
-    ]
+    executable_paths = [m["path"] for m in component_metadata if m.get("executable", False)]
 
     # Per-file capabilities: {path: set[cap]}
     file_capabilities: dict[str, set[str]] = {}
@@ -286,7 +284,9 @@ def node(state: SkillspectorState) -> AnalyzerNodeResponse:
                 confidence = _clamp(0.55 if is_test_only else 0.75)
                 source_files = [p for p, caps in file_capabilities.items() if cap in caps]
                 primary_file = source_files[0] if source_files else "SKILL.md"
-                logger.debug("%s: LP1 underdeclared capability %s in %s", ANALYZER_ID, cap, primary_file)
+                logger.debug(
+                    "%s: LP1 underdeclared capability %s in %s", ANALYZER_ID, cap, primary_file
+                )
                 findings.append(
                     Finding(
                         rule_id="LP1",
@@ -324,7 +324,9 @@ def node(state: SkillspectorState) -> AnalyzerNodeResponse:
             if matched_cat is None:
                 continue  # unknown permission, skip
             if matched_cat not in all_caps:
-                logger.debug("%s: LP4 over-declared permission %s (→%s)", ANALYZER_ID, perm, matched_cat)
+                logger.debug(
+                    "%s: LP4 over-declared permission %s (→%s)", ANALYZER_ID, perm, matched_cat
+                )
                 findings.append(
                     Finding(
                         rule_id="LP4",

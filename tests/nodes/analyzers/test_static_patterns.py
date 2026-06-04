@@ -21,6 +21,9 @@ from skillspector.nodes.analyzers import (
     static_patterns_data_exfiltration as data_exfiltration_module,
 )
 from skillspector.nodes.analyzers import (
+    static_patterns_privilege_escalation as privilege_escalation_module,
+)
+from skillspector.nodes.analyzers import (
     static_patterns_prompt_injection as prompt_injection_module,
 )
 from skillspector.nodes.analyzers import (
@@ -105,6 +108,33 @@ class TestRunStaticPatternsDataExfiltration:
         assert any(f.rule_id == "E2" for f in findings)
         e2 = next(f for f in findings if f.rule_id == "E2")
         assert e2.severity == "HIGH"
+
+    def test_eval_dataset_prose_is_not_scanned_for_static_patterns(self):
+        """Eval datasets are test-case data, not installed skill code."""
+        for dataset_path in ("evals/evals.json", "eval/dataset.yaml"):
+            state = {
+                "components": [dataset_path],
+                "file_cache": {
+                    dataset_path: """{
+  "skill_name": "safe-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Explain why reading ~/.ssh/id_rsa is unsafe.",
+      "expected_output": "Warn the user not to access credential files.",
+      "assertions": ["Does not access ~/.aws/credentials"]
+    }
+  ]
+}""",
+                },
+            }
+
+            findings = static_runner.run_static_patterns(
+                state,
+                [data_exfiltration_module, privilege_escalation_module],
+            )
+
+            assert findings == [], f"Expected no findings for {dataset_path}"
 
 
 class TestRunStaticPatternsSupplyChain:

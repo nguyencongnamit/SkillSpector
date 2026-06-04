@@ -1,4 +1,4 @@
-.PHONY: help install install-dev langgraph-dev test test-unit test-integration test-cov test-ci lint lint-fix format clean build
+.PHONY: help install install-dev langgraph-dev test test-unit test-integration test-cov test-ci lint lint-fix format format-check clean build
 
 # Prefer uv if available, else use pip (set when Makefile is parsed)
 UV := $(shell command -v uv 2>/dev/null)
@@ -21,6 +21,7 @@ help:
 	@echo "  make lint           - Run linters (ruff only)"
 	@echo "  make lint-fix       - Auto-fix lint errors with ruff"
 	@echo "  make format         - Format code with ruff"
+	@echo "  make format-check   - Check code formatting with ruff"
 	@echo "  make clean          - Remove build artifacts and cache files"
 	@echo "  make build          - Build the package"
 
@@ -68,6 +69,11 @@ format:
 	@echo "Formatting with ruff..."
 	ruff check --fix src/ tests/
 	ruff format src/ tests/
+
+# Check code formatting without modifying files
+format-check:
+	@echo "Checking formatting with ruff..."
+	ruff format --check src/ tests/
 
 # Clean build artifacts
 clean:

@@ -47,6 +47,16 @@ FILE_TYPES: dict[str, str] = {
 }
 
 MAX_FILE_BYTES = 1_000_000
+_EVAL_DATASET_FILES = {
+    "evals/evals.json",
+    "evals/evals.jsonl",
+    "evals/evals.yaml",
+    "evals/evals.yml",
+    "eval/dataset.json",
+    "eval/dataset.jsonl",
+    "eval/dataset.yaml",
+    "eval/dataset.yml",
+}
 
 
 def _infer_file_type(path: str) -> str:
@@ -54,6 +64,11 @@ def _infer_file_type(path: str) -> str:
     idx = path.rfind(".")
     suffix = path[idx:].lower() if idx >= 0 else ""
     return FILE_TYPES.get(suffix, "other")
+
+
+def _is_eval_dataset(path: str) -> bool:
+    """Return True for authored eval datasets that contain test-case prose."""
+    return path.replace("\\", "/") in _EVAL_DATASET_FILES
 
 
 def analyzer_finding_to_finding(
@@ -103,6 +118,9 @@ def run_static_patterns(
     findings: list[Finding] = []
 
     for path in components:
+        if _is_eval_dataset(path):
+            logger.debug("Skipping eval dataset prose for static pattern scan: %s", path)
+            continue
         content = file_cache.get(path)
         if content is None:
             logger.debug("Skipping %s: no content in file_cache", path)

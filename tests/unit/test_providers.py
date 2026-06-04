@@ -90,9 +90,7 @@ class TestNvBuildProvider:
     def test_resolve_model_default_when_no_env(self) -> None:
         assert NvBuildProvider().resolve_model() == NvBuildProvider.DEFAULT_MODEL
 
-    def test_resolve_model_env_overrides_default(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_resolve_model_env_overrides_default(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("SKILLSPECTOR_MODEL", "user/override")
         assert NvBuildProvider().resolve_model() == "user/override"
         # Env override applies to every slot.
@@ -108,8 +106,7 @@ class TestNvBuildProvider:
     def test_resolve_model_unknown_slot_falls_to_default(self) -> None:
         # Slots without an explicit override inherit DEFAULT_MODEL.
         assert (
-            NvBuildProvider().resolve_model("mcp_least_privilege")
-            == NvBuildProvider.DEFAULT_MODEL
+            NvBuildProvider().resolve_model("mcp_least_privilege") == NvBuildProvider.DEFAULT_MODEL
         )
 
 
@@ -138,9 +135,7 @@ class TestNvInferenceProvider:
         """With NVIDIA_INFERENCE_METADATA_KEY unset, we fall back to bundled YAML."""
         provider = NvInferenceProvider()
         assert provider.get_context_length("azure/anthropic/claude-sonnet-4-6") == 1_000_000
-        assert (
-            provider.get_max_output_tokens("azure/anthropic/claude-sonnet-4-6") == 128_000
-        )
+        assert provider.get_max_output_tokens("azure/anthropic/claude-sonnet-4-6") == 128_000
 
     def test_metadata_unknown_model_returns_none(self) -> None:
         provider = NvInferenceProvider()
@@ -162,9 +157,7 @@ class TestNvInferenceProvider:
     ) -> None:
         monkeypatch.setenv("SKILLSPECTOR_MODEL", "user/override")
         # Env wins over the meta_analyzer slot default.
-        assert (
-            NvInferenceProvider().resolve_model("meta_analyzer") == "user/override"
-        )
+        assert NvInferenceProvider().resolve_model("meta_analyzer") == "user/override"
 
 
 class TestOpenAIProvider:

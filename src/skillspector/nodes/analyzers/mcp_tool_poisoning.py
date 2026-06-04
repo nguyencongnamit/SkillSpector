@@ -182,9 +182,7 @@ def _check_tp1(text: str, source_field: str) -> list[Finding]:
         findings.append(
             Finding(
                 rule_id="TP1",
-                message=(
-                    f"HTML comment found in '{source_field}': potential hidden instruction."
-                ),
+                message=(f"HTML comment found in '{source_field}': potential hidden instruction."),
                 severity="HIGH",
                 confidence=confidence,
                 file="SKILL.md",
@@ -353,8 +351,7 @@ def _check_tp2(text: str, source_field: str, is_identifier: bool) -> list[Findin
         if found_confusables:
             homoglyph_found = True
             examples = ", ".join(
-                f"U+{ord(c):04X} (looks like '{latin}')"
-                for c, latin in found_confusables[:3]
+                f"U+{ord(c):04X} (looks like '{latin}')" for c, latin in found_confusables[:3]
             )
             findings.append(
                 Finding(
@@ -755,7 +752,7 @@ Respond in JSON matching this exact schema:
             # Strip opening fence (```json or ```)
             first_newline = json_text.find("\n")
             if first_newline != -1:
-                json_text = json_text[first_newline + 1:]
+                json_text = json_text[first_newline + 1 :]
             # Strip closing fence
             if json_text.rstrip().endswith("```"):
                 json_text = json_text.rstrip()[:-3].rstrip()
@@ -789,9 +786,7 @@ Respond in JSON matching this exact schema:
                 file="SKILL.md",
                 category=_CATEGORY,
                 tags=list(_FRAMEWORK_TAGS),
-                explanation=explanation or (
-                    f"Declared: {declared}. Actual: {actual}."
-                ),
+                explanation=explanation or (f"Declared: {declared}. Actual: {actual}."),
                 remediation=(
                     "Update the skill description to accurately reflect all capabilities, "
                     "or remove undeclared functionality from the implementation."

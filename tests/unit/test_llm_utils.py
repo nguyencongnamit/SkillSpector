@@ -83,9 +83,7 @@ class TestCredentialResolution:
 
 
 class TestIsLlmAvailable:
-    def test_returns_true_when_credentials_present(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_returns_true_when_credentials_present(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("OPENAI_API_KEY", "k")
         ok, msg = is_llm_available()
         assert ok is True
