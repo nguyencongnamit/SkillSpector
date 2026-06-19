@@ -148,6 +148,7 @@ inference gateways.
 | ---------- | ---- | ---- | ---- |
 | `openai` | `OPENAI_API_KEY` (+ optional `OPENAI_BASE_URL`) | api.openai.com (or any OpenAI-compatible URL) | `gpt-5.4` |
 | `anthropic` | `ANTHROPIC_API_KEY` | api.anthropic.com | `claude-opus-4-6` |
+| `claude_cli` | _none_ — uses the local `claude` CLI / subscription | local `claude` CLI (no API) | `claude-opus-4-6` |
 | `nv_build` | `NVIDIA_INFERENCE_KEY` | build.nvidia.com | `deepseek-ai/deepseek-v4-flash` |
 
 ```bash
@@ -180,6 +181,32 @@ skillspector scan ./my-skill/
 # Skip LLM analysis (faster, static analysis only)
 skillspector scan ./my-skill/ --no-llm
 ```
+
+#### Run on a Claude subscription (no API key)
+
+The `claude_cli` provider drives your locally installed [`claude`
+CLI](https://docs.claude.com/en/docs/claude-code) instead of calling the
+Anthropic API, so LLM analysis runs on your **Claude Max/Pro subscription**
+(or a `CLAUDE_CODE_OAUTH_TOKEN`) with **no API key**. Best for local,
+interactive scans — not unattended CI, which has no subscription session to
+borrow and should use an API-key provider.
+
+```bash
+# Requires a logged-in `claude` CLI (run `claude` once to sign in)
+export SKILLSPECTOR_PROVIDER=claude_cli
+skillspector scan ./my-skill/
+
+# Optional tuning
+export SKILLSPECTOR_MODEL=claude-sonnet-4-6        # cheaper/faster model
+export SKILLSPECTOR_CLAUDE_MAX_CONCURRENCY=3       # cap parallel CLI subprocesses (rate caps)
+export SKILLSPECTOR_CLAUDE_TIMEOUT=600             # per-call timeout (seconds)
+export SKILLSPECTOR_CLAUDE_CLI=claude              # path to the claude binary
+```
+
+> **Note:** Each scan spawns `claude` subprocesses (slower than the API), and a
+> personal subscription has rolling usage caps — heavy fan-out may be throttled.
+> Using a personal subscription to power automation may fall outside Anthropic's
+> consumer terms; keep it to your own local use.
 
 ## Vulnerability Patterns
 

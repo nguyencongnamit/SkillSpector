@@ -24,6 +24,7 @@ Selection happens via the ``SKILLSPECTOR_PROVIDER`` env var:
 
     openai        → OpenAIProvider          (api.openai.com)
     anthropic     → AnthropicProvider       (api.anthropic.com)
+    claude_cli    → ClaudeCliProvider       (local `claude` CLI / subscription)
     nv_build      → NvBuildProvider         (build.nvidia.com)
 
 When unset, the selector defaults to ``nv_build``.
@@ -64,6 +65,10 @@ def _select_active_provider() -> LLMProvider:
         from .anthropic import AnthropicProvider
 
         return AnthropicProvider()
+    if name in ("claude_cli", "claude_code", "subscription"):
+        from .claude_cli import ClaudeCliProvider
+
+        return ClaudeCliProvider()
     if name == "nv_build":
         return NvBuildProvider()
     if name in ("nv_inference", ""):
@@ -78,7 +83,7 @@ def _select_active_provider() -> LLMProvider:
 
     raise ValueError(
         f"Unknown SKILLSPECTOR_PROVIDER: {name!r}. "
-        "Expected one of: openai, anthropic, nv_build (or unset)."
+        "Expected one of: openai, anthropic, claude_cli, nv_build (or unset)."
     )
 
 

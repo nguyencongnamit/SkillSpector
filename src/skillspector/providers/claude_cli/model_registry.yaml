@@ -1,0 +1,38 @@
+# Token-budget metadata for the ClaudeCliProvider (local `claude` CLI /
+# subscription).  Consulted whenever SKILLSPECTOR_PROVIDER=claude_cli.
+#
+# Format:
+#   models:
+#     "<model-label>":
+#       context_length: <int>          # total context window in tokens (required)
+#       max_output_tokens: <int>       # model's max output cap (optional)
+#
+# Model labels are the names the `claude` CLI accepts via --model (bare
+# Anthropic IDs, or aliases like "opus"/"sonnet"/"haiku").  Mirrors the
+# AnthropicProvider numbers since the same models are served.
+
+models:
+  "claude-opus-4-5":
+    context_length: 200000
+    max_output_tokens: 64000
+
+  "claude-sonnet-4-6":
+    context_length: 1000000
+    max_output_tokens: 128000
+
+  "claude-opus-4-6":
+    context_length: 1000000
+    max_output_tokens: 128000
+
+  # CLI aliases (resolve to "latest" of each tier for the active subscription).
+  "opus":
+    context_length: 200000
+    max_output_tokens: 64000
+
+  "sonnet":
+    context_length: 1000000
+    max_output_tokens: 128000
+
+  "haiku":
+    context_length: 200000
+    max_output_tokens: 64000
