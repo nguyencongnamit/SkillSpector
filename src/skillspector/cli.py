@@ -46,6 +46,25 @@ app = typer.Typer(
 )
 
 console = Console()
+err_console = Console(stderr=True)
+
+_BANNER = r"""
+   ____  _    _ _ _ ____                  _
+  / ___|| | _(_) | / ___| _ __   ___  ___| |_ ___  _ __
+  \___ \| |/ / | | \___ \| '_ \ / _ \/ __| __/ _ \| '__|
+   ___) |   <| | | |___) | |_) |  __/ (__| || (_) | |
+  |____/|_|\_\_|_|_|____/| .__/ \___|\___|\__\___/|_|
+                         |_|
+"""
+
+
+def print_banner() -> None:
+    """Print the SkillSpector ASCII banner to stderr (keeps stdout clean)."""
+    err_console.print(f"[bold cyan]{_BANNER}[/bold cyan]", highlight=False)
+    err_console.print(
+        f"  [dim]Security scanner for AI agent skills · v{__version__}[/dim]\n",
+        highlight=False,
+    )
 
 
 class FormatChoice(StrEnum):
@@ -207,6 +226,8 @@ def scan(
     """
     result = None
     try:
+        if format == FormatChoice.terminal:
+            print_banner()
         yara_dir = str(yara_rules_dir.resolve()) if yara_rules_dir else None
         state = _scan_state(input_path, format, no_llm, yara_rules_dir=yara_dir)
         if verbose:
